@@ -63,7 +63,7 @@ metainfo = dict(
 DIOR_train_dataset=dict(
     type=dataset_type,
     data_root=data_root,
-    ann_file='processed_LAE-1M_DIOR_train.json',
+    ann_file='processed_DIOR_train.json',
     metainfo=metainfo,
     data_prefix=dict(img='JPEGImages-trainval/'),
     filter_cfg=dict(filter_empty_gt=True),

@@ -64,7 +64,7 @@ metainfo = dict(
 DOTAv2_train_dataset=dict(
     type=dataset_type,
     data_root=data_root,
-    ann_file='processed_LAE-1M_DOTAv2_train.json',
+    ann_file='processed_DOTAv2_train.json',
     metainfo=metainfo,
     data_prefix=dict(img='images/'),
     filter_cfg=dict(filter_empty_gt=True),

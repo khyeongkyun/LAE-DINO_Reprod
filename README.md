@@ -258,6 +258,7 @@ huggingface-cli download --resume-download google-bert/bert-base-uncased --local
 
 ### Train LAE-DINO Model
 
+#### Pre-training
 ```
 ./tools/dist_train.sh configs/lae_dino/lae_dino_swin-t_pretrain_LAE-1M.py 4
 ```
@@ -267,6 +268,20 @@ Continuing training from the last training breakpoint,
 ```
 ./tools/dist_train_lae.sh configs/lae_dino/lae_dino_swin-t_pretrain_LAE-1M.py 4
 ```
+### Fine-tuning
+```
+# DIOR
+./tools/dist_train.sh configs/lae_dino/lae_dino_swin-t_finetune_DIOR.py 4
+# DOTAv2
+./tools/dist_train.sh configs/lae_dino/lae_dino_swin-t_finetune_DOTA.py 4
+```
+**Note: About Data Labeling Description**
+
+| File Name                         | Description                                                                 |
+|----------------------------------|-----------------------------------------------------------------------------|
+| DOTAv2_train.json                | Original annotation file                                                   |
+| processed_DOTAv2_train.json      | Splits images with too many annotations to prevent GPU memory overflow     |
+| processed_LAE-1M_DOTAv2_train.json | Sampled from `processed_DOTAv2_train.json` to construct the LAE-1M dataset |
 
 ### Test LAE-DINO Model
 
