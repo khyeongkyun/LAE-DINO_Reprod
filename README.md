@@ -375,6 +375,8 @@ If you are interested in the following work, please cite the following paper.
   year={2025}
 }
 
+or
+
 @misc{pan2024locateearthadvancingopenvocabulary,
     title={Locate Anything on Earth: Advancing Open-Vocabulary Object Detection for Remote Sensing Community}, 
     author={Jiancheng Pan and Yanxing Liu and Yuqian Fu and Muyuan Ma and Jiaohao Li and Danda Pani Paudel and Luc Van Gool and Xiaomeng Huang},
