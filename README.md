@@ -304,7 +304,7 @@ python tools/analysis_tools/analyze_logs.py plot_curve
 
 #### Open Vocabulary Object Detection
 
-For example:
+For one image example:
 ```
 python demo/image_demo.py images/airplane.jpg \
         configs/lae_dino/lae_dino_swin-t_pretrain_LAE-1M.py \
@@ -313,7 +313,15 @@ python demo/image_demo.py images/airplane.jpg \
        --palette random \
        --pred-score-thr 0.4
 ```
-
+For one dirs:
+```
+python demo/image_demo.py images/ \
+        configs/lae_dino/lae_dino_swin-t_pretrain_LAE-1M.py \
+        --weights /path/to/model/ \
+       --texts 'playground . road . tank . airplane . vehicle' -c \
+       --palette random \
+       --pred-score-thr 0.4
+```
 Based on the stable version of the LAE-1M dataset, we used 4-card A100 and ran 32 epochs with 4 per card batch size. LAE-80C considers more categories and can be used as a benchmark for zero-shot and few-shot in remote sensing.
 
 | Method      | DIOR AP50 | DOTAv2.0 mAP | LAE-80C mAP |
