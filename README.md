@@ -35,6 +35,7 @@
 - [ ] Release LAE-DINO Model -->
 
 ## News
+- [2025/4/19] We add the inference examples and the original annotation, and the processed annotation file of DIOR and DOTAv2.
 - [2025/3/19] We add the LAE-DINO's config fine-tuned on DIOR and DOTAv2.
 - [2025/2/28] We have open sourced the <a href="#model">LAE-DINO Model </a>.
 - [2025/2/5] We have open sourced the <a href="#dataset">LAE-1M Dataset </a>.
@@ -259,6 +260,7 @@ huggingface-cli download --resume-download google-bert/bert-base-uncased --local
 ### Train LAE-DINO Model
 
 #### Pre-training
+
 ```
 ./tools/dist_train.sh configs/lae_dino/lae_dino_swin-t_pretrain_LAE-1M.py 4
 ```
@@ -268,13 +270,16 @@ Continuing training from the last training breakpoint,
 ```
 ./tools/dist_train_lae.sh configs/lae_dino/lae_dino_swin-t_pretrain_LAE-1M.py 4
 ```
-### Fine-tuning
+
+#### Fine-tuning
+
 ```
 # DIOR
 ./tools/dist_train.sh configs/lae_dino/lae_dino_swin-t_finetune_DIOR.py 4
 # DOTAv2
 ./tools/dist_train.sh configs/lae_dino/lae_dino_swin-t_finetune_DOTA.py 4
 ```
+
 **Note: About Data Labeling Description**
 
 | File Name                         | Description                                                                 |
@@ -288,6 +293,27 @@ Continuing training from the last training breakpoint,
 ```
 ./tools/dist_test.sh configs/lae_dino/lae_dino_swin-t_pretrain_LAE-1M.py /path/to/model/ 4
 ```
+
+### Analyze
+
+```
+python tools/analysis_tools/analyze_logs.py plot_curve 
+```
+
+### Inference
+
+####Open Vocabulary Object Detection
+
+For example:
+```
+python demo/image_demo.py images/airplane.jpg \
+        configs/lae_dino/lae_dino_swin-t_pretrain_LAE-1M.py \
+        --weights /path/to/model/ \
+       --texts 'playground . road . tank . airplane . vehicle' -c \
+       --palette random \
+       --pred-score-thr 0.4
+```
+
 Based on the stable version of the LAE-1M dataset, we used 4-card A100 and ran 32 epochs with 4 per card batch size. LAE-80C considers more categories and can be used as a benchmark for zero-shot and few-shot in remote sensing.
 
 | Method      | DIOR AP50 | DOTAv2.0 mAP | LAE-80C mAP |
