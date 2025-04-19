@@ -302,7 +302,7 @@ python tools/analysis_tools/analyze_logs.py plot_curve
 
 ### Inference
 
-####Open Vocabulary Object Detection
+#### Open Vocabulary Object Detection
 
 For example:
 ```
