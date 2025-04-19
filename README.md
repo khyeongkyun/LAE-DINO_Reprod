@@ -294,13 +294,7 @@ Continuing training from the last training breakpoint,
 ./tools/dist_test.sh configs/lae_dino/lae_dino_swin-t_pretrain_LAE-1M.py /path/to/model/ 4
 ```
 
-### Analyze
-
-```
-python tools/analysis_tools/analyze_logs.py plot_curve 
-```
-
-### Inference
+### Inference LAE-DINO Model
 
 #### Open Vocabulary Object Detection
 
@@ -322,6 +316,13 @@ python demo/image_demo.py images/ \
        --palette random \
        --pred-score-thr 0.4
 ```
+
+### Analyze
+
+```
+python tools/analysis_tools/analyze_logs.py plot_curve 
+```
+
 Based on the stable version of the LAE-1M dataset, we used 4-card A100 and ran 32 epochs with 4 per card batch size. LAE-80C considers more categories and can be used as a benchmark for zero-shot and few-shot in remote sensing.
 
 | Method      | DIOR AP50 | DOTAv2.0 mAP | LAE-80C mAP |
