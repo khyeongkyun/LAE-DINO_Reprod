@@ -365,6 +365,16 @@ This project references and uses the following open source models and datasets. 
 If you are interested in the following work, please cite the following paper.
 
 ```
+@inproceedings{pan2025locate,
+  title={Locate anything on earth: Advancing open-vocabulary object detection for remote sensing community},
+  author={Pan, Jiancheng and Liu, Yanxing and Fu, Yuqian and Ma, Muyuan and Li, Jiahao and Paudel, Danda Pani and Van Gool, Luc and Huang, Xiaomeng},
+  booktitle={Proceedings of the AAAI Conference on Artificial Intelligence},
+  volume={39},
+  number={6},
+  pages={6281--6289},
+  year={2025}
+}
+
 @misc{pan2024locateearthadvancingopenvocabulary,
     title={Locate Anything on Earth: Advancing Open-Vocabulary Object Detection for Remote Sensing Community}, 
     author={Jiancheng Pan and Yanxing Liu and Yuqian Fu and Muyuan Ma and Jiaohao Li and Danda Pani Paudel and Luc Van Gool and Xiaomeng Huang},
