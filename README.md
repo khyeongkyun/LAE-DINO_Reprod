@@ -1,5 +1,8 @@
+<p align="center">
+    <img src="assets/lae-dino.png" alt="Image" width="250">
+</p>
 <div align="center">
-<h1 align="center"> <img width="30" alt="image" src="./assets/lae-dino.png"> Locate Anything on Earth: Advancing Open-Vocabulary Object Detection for Remote Sensing Community</h1>
+<h1 align="center">Locate Anything on Earth: Advancing Open-Vocabulary Object Detection for Remote Sensing Community</h1>
 
 <h4 align="center"><em>Jiancheng Pan*,     Yanxing Liu*,     Yuqian Fu✉,     Muyuan Ma,</em></h4>
 
