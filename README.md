@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="assets/lae-dino.png" alt="Image" width="250">
+    <img src="assets/lae-dino.png" alt="Image" width="100">
 </p>
 <div align="center">
 <h1 align="center">Locate Anything on Earth: Advancing Open-Vocabulary Object Detection for Remote Sensing Community</h1>
