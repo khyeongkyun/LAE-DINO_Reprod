@@ -332,14 +332,18 @@ train_dataloader = dict(
     sampler=dict(type='DefaultSampler', shuffle=True),
     batch_sampler=dict(type='AspectRatioBatchSampler'),
     dataset=dict(type='ConcatDataset', datasets=all_train_dataset))
+
 val_dataloader = dict(
     batch_size=1,
     num_workers=2,
     persistent_workers=True,
     drop_last=False,
     sampler=dict(type='DefaultSampler', shuffle=False),
-    dataset=dict(type='ConcatDataset', datasets=all_val_dataset))
+    dataset=dict(type='ConcatDataset', datasets=all_val_dataset, pipeline=test_pipeline)) # add pipeline
+
 test_dataloader = val_dataloader
+
+
 
 val_evaluator = dict(
     type='MultiDatasetsEvaluator',
