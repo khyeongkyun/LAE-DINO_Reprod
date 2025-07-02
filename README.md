@@ -73,7 +73,7 @@ LAE-Label is mainly based on the [SAM](https://github.com/facebookresearch/segme
 (Optional) For high resolution remote sensing images, we crop to `1024x1024` size,
 
 ```
-python LAE-Label/crop_huge_images.py --input_folder ./LAE_data/DATASET --input_folder --output_folder ./LAE_data/DATASET_sub
+python LAE-Label/crop_huge_images.py --input_folder ./LAE_data/DATASET --output_folder ./LAE_data/DATASET_sub
 ```
 
 SAM is then used to obtain the region of interst (RoI) of the image,
