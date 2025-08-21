@@ -8,7 +8,7 @@
 
 <h4 align="center"><em>Jiahao Li,     Danda Pani Paudel,    Luc Van Gool,     Xiaomeng Huang✉ </em></h4>
 <p align="center">
-    <img src="assets/inst.png" alt="Image" width="400">
+    <img src="assets/inst.png" alt="Image" width="500">
 </p>
 
 \* *Equal Contribution* &nbsp; &nbsp; Corresponding Author ✉
