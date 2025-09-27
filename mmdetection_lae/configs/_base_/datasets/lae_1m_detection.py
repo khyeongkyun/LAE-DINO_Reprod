@@ -339,7 +339,7 @@ val_dataloader = dict(
     persistent_workers=True,
     drop_last=False,
     sampler=dict(type='DefaultSampler', shuffle=False),
-    dataset=dict(type='ConcatDataset', datasets=all_val_dataset, pipeline=test_pipeline)) # add pipeline
+    dataset=dict(type='ConcatDataset', datasets=all_val_dataset)) # add pipeline
 
 test_dataloader = val_dataloader
 
