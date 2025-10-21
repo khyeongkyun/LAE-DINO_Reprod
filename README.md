@@ -330,9 +330,11 @@ python tools/analysis_tools/analyze_logs.py plot_curve
 
 Based on the stable version of the LAE-1M dataset, we used 4-card A100 and ran 32 epochs with 4 per card batch size. LAE-80C considers more categories and can be used as a benchmark for zero-shot and few-shot in remote sensing.
 
-| Method      | DIOR AP50 | DOTAv2.0 mAP | LAE-80C mAP |
-|------------|------|-------------|-------------|
-| LAE-DINO-T | 87.3 | 51.5        | 24.1 [[weight]](https://drive.google.com/file/d/1EiR8KtNRYIeOfvtIe9C82cQk_uOMIQ8U/view?usp=sharing) |
+| Method      | Backbone      | Pre-Train Data      | DIOR AP50 | DOTAv2.0 mAP | LAE-80C mAP | Weights |
+|------------|------------|------------|------|-------------|-------------|-------------|
+| LAE-DINO | Swin-T |LAE-1M | 87.3 | 51.5        | 24.1  | [[weight]](https://drive.google.com/file/d/1EiR8KtNRYIeOfvtIe9C82cQk_uOMIQ8U/view?usp=sharing)
+| LAE-DINO-FT | Swin-T|- | 92.0 | -        | -  | [[weight]](https://drive.google.com/file/d/1Q35PUdzUHLIM22ozm_ccgJzXXtfMXSOm/view?usp=sharing)
+| LAE-DINO-FT | Swin-T|- | - | 55.5        | - | [[weight]](https://drive.google.com/file/d/1rxDO2QGNWw8WiDKRTqqVrK-JE4rE3VVT/view?usp=sharing)
 
 ## Discussion
 - Our work is suitable for zero-shot and few-shot benchmark models in remote sensing, which can be used for pre-detection of some common and uncommon categories.
