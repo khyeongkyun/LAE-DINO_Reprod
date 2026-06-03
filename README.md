@@ -39,6 +39,7 @@
 - [ ] Release LAE-DINO Model -->
 
 ## News
+- [2026/6/3] Thanks to ModelScope's computing support, LAE-DINO has been deployed on [ModelScope Studio](https://modelscope.cn/studios/ML4Sustain/LAE-DINO).
 - [2025/8/21] All our LAE-1M dataset support is available for download at 🤗 [HuggingFace](https://huggingface.co/datasets/jaychempan/LAE-1M).
 - [2025/4/19] We add the inference examples and the original annotation, and the processed annotation file of DIOR and DOTAv2.
 - [2025/3/19] We add the LAE-DINO's config fine-tuned on DIOR and DOTAv2.
