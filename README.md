@@ -20,7 +20,7 @@
     <a href="https://ojs.aaai.org/index.php/AAAI/article/view/32672"><img src="https://img.shields.io/badge/AAAI'25-Paper-blue"></a>
     <a href="https://jianchengpan.space/projects/LAE/"><img src="https://img.shields.io/badge/LAE-Project_Page-<color>"></a>
     <a href="https://modelscope.cn/studios/ML4Sustain/LAE-DINO"><img src="https://img.shields.io/badge/Model-ModelScope-624aff?logo=modelscope"></a>
-    <a href="https://huggingface.co/datasets/jaychempan/LAE-1M"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20Dataset-HuggingFace-yellow?style=flat&logo=hug"></a>
+    <a href="https://huggingface.co/datasets/jaychempan/LAE-1M"><img src="https://img.shields.io/badge/Model-HuggingFace-ffd21e?logo=huggingface"></a>
     <a href="https://github.com/jaychempan/LAE-DINO/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow"></a>
 </p>
 
