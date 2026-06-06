@@ -19,8 +19,10 @@
     <a href="http://arxiv.org/abs/2408.09110"><img src="https://img.shields.io/badge/Arxiv-2408.09110-b31b1b.svg?logo=arXiv"></a>
     <a href="https://ojs.aaai.org/index.php/AAAI/article/view/32672"><img src="https://img.shields.io/badge/AAAI'25-Paper-blue"></a>
     <a href="https://jianchengpan.space/projects/LAE/"><img src="https://img.shields.io/badge/LAE-Project_Page-<color>"></a>
-    <a href="https://modelscope.cn/studios/ML4Sustain/LAE-DINO"><img src="https://img.shields.io/badge/Model-ModelScope-624aff?logo=modelscope"></a>
-    <a href="https://huggingface.co/datasets/jaychempan/LAE-1M"><img src="https://img.shields.io/badge/Model-HuggingFace-ffd21e?logo=huggingface"></a>
+    <a href="https://modelscope.cn/studios/ML4Sustain/LAE-DINO"><img src="https://img.shields.io/badge/ModelScope-Demo-624aff?logo=modelscope"></a>
+    <a href="https://www.modelscope.cn/models/ML4Sustain/LAE-DINO"><img src="https://img.shields.io/badge/Model-ModelScope-624aff?logo=modelscope"></a>
+    <a href="https://huggingface.co/ML4Sustain/LAE-DINO"><img src="https://img.shields.io/badge/Model-HuggingFace-ffd21e?logo=huggingface"></a>
+    <a href="https://huggingface.co/datasets/ML4Sustain/LAE-1M"><img src="https://img.shields.io/badge/Dataset-HuggingFace-ffd21e?logo=huggingface"></a>
     <a href="https://github.com/jaychempan/LAE-DINO/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow"></a>
 </p>
 
@@ -41,7 +43,7 @@
 
 ## News
 - [2026/6/3] Thanks to ModelScope's computing support, LAE-DINO has been deployed on [ModelScope Studio](https://modelscope.cn/studios/ML4Sustain/LAE-DINO).
-- [2025/8/21] All our LAE-1M dataset support is available for download at 🤗 [HuggingFace](https://huggingface.co/datasets/jaychempan/LAE-1M).
+- [2025/8/21] All our LAE-1M dataset support is available for download at 🤗 [HuggingFace](https://huggingface.co/datasets/ML4Sustain/LAE-1M) and <a href="https://www.modelscope.cn/datasets/ML4Sustain/LAE-1M">ModelScope</a>.
 - [2025/4/19] We add the inference examples and the original annotation, and the processed annotation file of DIOR and DOTAv2.
 - [2025/3/19] We add the LAE-DINO's config fine-tuned on DIOR and DOTAv2.
 - [2025/2/28] We have open sourced the <a href="#model">LAE-DINO Model </a>.
@@ -149,9 +151,9 @@ Download data can be downloaded through `Baidu disk` or `Onedrive`, the download
 
 Note: **LAE-Label Engine is continuously optimized, the quality of data annotation is also improved.** We try to explore higher quality data annotations, and dataset versions are iteratively updated. The current version dataset is v1.1, which is the best labelled version available. We also intend to build stable benchmarks based on this version.
 
-> Baidu disk: [download link](https://pan.baidu.com/s/1_l2i0gUPcDbTUkNkUqEhjg?pwd=chrx)
+> ModelScope: [download link](https://www.modelscope.cn/datasets/ML4Sustain/LAE-1M)
 
-> Onedrive: [download link](https://1drv.ms/f/c/72d4076f2aa319be/EhpYDEA71mFOorBWIoxglwMBNuy3i3bbf2W1qi8IHBjOAA?e=mGThPR)
+> HuggingFace: [download link](https://huggingface.co/datasets/ML4Sustain/LAE-1M)
 
 Once you have downloaded the dataset, you can extract the image files in all subdirectories with a shell command.
 
@@ -334,9 +336,9 @@ Based on the stable version of the LAE-1M dataset, we used 4-card A100 and ran 3
 
 | Method      | Backbone      | Pre-Train Data      | DIOR AP50 | DOTAv2.0 mAP | LAE-80C mAP | Weights |
 |------------|------------|------------|------|-------------|-------------|-------------|
-| LAE-DINO | Swin-T |LAE-1M | 87.3 | 51.5        | 24.1  | [[weight]](https://drive.google.com/file/d/1EiR8KtNRYIeOfvtIe9C82cQk_uOMIQ8U/view?usp=sharing)
-| LAE-DINO-FT | Swin-T|- | 92.0 | -        | -  | [[weight]](https://drive.google.com/file/d/1Q35PUdzUHLIM22ozm_ccgJzXXtfMXSOm/view?usp=sharing)
-| LAE-DINO-FT | Swin-T|- | - | 55.5        | - | [[weight]](https://drive.google.com/file/d/1rxDO2QGNWw8WiDKRTqqVrK-JE4rE3VVT/view?usp=sharing)
+| LAE-DINO | Swin-T |LAE-1M | 87.3 | 51.5        | 24.1  | [[HuggingFace]](https://huggingface.co/ML4Sustain/LAE-DINO/blob/main/checkpoints/lae_dino_swint_lae1m-28ca3a15.pth) [[ModelScope]](https://www.modelscope.cn/models/ML4Sustain/LAE-DINO/files/master/checkpoints/lae_dino_swint_lae1m-28ca3a15.pth)
+| LAE-DINO-FT | Swin-T|- | 92.0 | -        | -  | [[HuggingFace]](https://huggingface.co/ML4Sustain/LAE-DINO/blob/main/checkpoints/lae_dino_swint_fintune_dior-e612b298.pth) [[ModelScope]](https://www.modelscope.cn/models/ML4Sustain/LAE-DINO/files/master/checkpoints/lae_dino_swint_fintune_dior-e612b298.pth)
+| LAE-DINO-FT | Swin-T|- | - | 55.5        | - | [[HuggingFace]](https://huggingface.co/ML4Sustain/LAE-DINO/blob/main/checkpoints/lae_dino_swint_fintune_dota-9e1e8782.pth) [[ModelScope]](https://www.modelscope.cn/models/ML4Sustain/LAE-DINO/files/master/checkpoints/lae_dino_swint_fintune_dota-9e1e8782.pth)
 
 ## Discussion
 - Our work is suitable for zero-shot and few-shot benchmark models in remote sensing, which can be used for pre-detection of some common and uncommon categories.
