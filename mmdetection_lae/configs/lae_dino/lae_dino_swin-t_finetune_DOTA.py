@@ -145,6 +145,11 @@ train_cfg = dict(max_epochs=max_epochs, type='EpochBasedTrainLoop', val_interval
 # base_batch_size = (16 GPUs) x (2 samples per GPU)
 auto_scale_lr = dict(base_batch_size=16)
 
+# UPDATE: latency-per-block
+# No-op unless model.per_block_latency_measure=True (e.g. via --cfg-options
+# at test time); reports per-block latency after the test-set evaluation.
+custom_hooks = [dict(type='LatencyLoggerHook')]
+
 # # ==============================
 # # == 可视化训练过程
 # # ==============================

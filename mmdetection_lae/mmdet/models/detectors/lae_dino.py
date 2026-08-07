@@ -15,6 +15,7 @@ from collections import Counter
 from mmdet.registry import MODELS
 from mmdet.structures import OptSampleList, SampleList
 from mmdet.utils import ConfigType
+from mmdet.utils.latency_timer import BlockLatencyRecorder  # UPDATE: latency-per-block
 from ..layers import SinePositionalEncoding
 from ..layers.transformer.grounding_dino_layers import (
     GroundingDinoTransformerDecoder, GroundingDinoTransformerEncoder, MetaGroundingDinoTransformerEncoder)
@@ -73,15 +74,22 @@ class LAEDINO(DINO):
                  language_model,
                  *args,
                  use_autocast=False,
+                 per_block_latency_measure=False,  # UPDATE: latency-per-block
+                 latency_warmup_iters=10,  # UPDATE: latency-per-block
                  **kwargs) -> None:
 
         self.language_model_cfg = language_model
         self._special_tokens = '. '
         self.use_autocast = use_autocast
-        
+
         self.img_emb_list = []
         self.txt_emb_list = []
-        
+
+        # UPDATE: latency-per-block
+        self.latency_recorder = BlockLatencyRecorder(
+            enabled=per_block_latency_measure,
+            warmup_iters=latency_warmup_iters)
+
         super().__init__(*args, **kwargs)
 
     def _init_layers(self) -> None:
@@ -328,18 +336,21 @@ class LAEDINO(DINO):
         text_dict: Dict,
         batch_data_samples: OptSampleList = None,
     ) -> Dict:
-        encoder_inputs_dict, decoder_inputs_dict = self.pre_transformer(
-            img_feats, batch_data_samples)
-        
+        # UPDATE: latency-per-block
+        with self.latency_recorder.cuda_block('pre_transformer'):
+            encoder_inputs_dict, decoder_inputs_dict = self.pre_transformer(
+                img_feats, batch_data_samples)
+
         ## VisGT
-        memory_text_by_vis, text_attention_mask_by_vis = self.forward_pre_encoder(
-            feat=encoder_inputs_dict['feat'],
-            feat_mask=encoder_inputs_dict['feat_mask'],
-            feat_pos=encoder_inputs_dict['feat_pos'],
-            spatial_shapes=encoder_inputs_dict['spatial_shapes'],
-            level_start_index=encoder_inputs_dict['level_start_index'],
-            valid_ratios=encoder_inputs_dict['valid_ratios'],
-            text_dict=text_dict,img_feats=img_feats)
+        with self.latency_recorder.cuda_block('visgt'):  # UPDATE: latency-per-block
+            memory_text_by_vis, text_attention_mask_by_vis = self.forward_pre_encoder(
+                feat=encoder_inputs_dict['feat'],
+                feat_mask=encoder_inputs_dict['feat_mask'],
+                feat_pos=encoder_inputs_dict['feat_pos'],
+                spatial_shapes=encoder_inputs_dict['spatial_shapes'],
+                level_start_index=encoder_inputs_dict['level_start_index'],
+                valid_ratios=encoder_inputs_dict['valid_ratios'],
+                text_dict=text_dict,img_feats=img_feats)
         
         if self.training:
             loss_visgt_ = self.get_contr_loss(memory_text_by_vis.mean(dim=1, keepdim=True), text_dict['class_embedded'].mean(dim=1, keepdim=True))
@@ -354,20 +365,24 @@ class LAEDINO(DINO):
         new_text_dict = text_dict
         text_dict['embedded'] = memory_text_by_vis + text_dict['embedded']
 
-        encoder_outputs_dict = self.forward_encoder(
-            feat=encoder_inputs_dict['feat'],
-            feat_mask=encoder_inputs_dict['feat_mask'],
-            feat_pos=encoder_inputs_dict['feat_pos'],
-            spatial_shapes=encoder_inputs_dict['spatial_shapes'],
-            level_start_index=encoder_inputs_dict['level_start_index'],
-            valid_ratios=encoder_inputs_dict['valid_ratios'],
-            text_dict=new_text_dict)
-        
-        tmp_dec_in, head_inputs_dict = self.pre_decoder(
-            **encoder_outputs_dict, batch_data_samples=batch_data_samples)
-        decoder_inputs_dict.update(tmp_dec_in)
+        # UPDATE: latency-per-block
+        with self.latency_recorder.cuda_block('fusion_encoder'):
+            encoder_outputs_dict = self.forward_encoder(
+                feat=encoder_inputs_dict['feat'],
+                feat_mask=encoder_inputs_dict['feat_mask'],
+                feat_pos=encoder_inputs_dict['feat_pos'],
+                spatial_shapes=encoder_inputs_dict['spatial_shapes'],
+                level_start_index=encoder_inputs_dict['level_start_index'],
+                valid_ratios=encoder_inputs_dict['valid_ratios'],
+                text_dict=new_text_dict)
 
-        decoder_outputs_dict = self.forward_decoder(**decoder_inputs_dict)
+        # UPDATE: latency-per-block (pre_decoder + forward_decoder combined)
+        with self.latency_recorder.cuda_block('decoder'):
+            tmp_dec_in, head_inputs_dict = self.pre_decoder(
+                **encoder_outputs_dict, batch_data_samples=batch_data_samples)
+            decoder_inputs_dict.update(tmp_dec_in)
+
+            decoder_outputs_dict = self.forward_decoder(**decoder_inputs_dict)
         head_inputs_dict.update(decoder_outputs_dict)
 
         text_dict = new_text_dict
@@ -625,6 +640,7 @@ class LAEDINO(DINO):
         return losses_all
 
     def predict(self, batch_inputs, batch_data_samples, rescale: bool = True):
+        self.latency_recorder.start_iter()  # UPDATE: latency-per-block
         text_prompts = []
         enhanced_text_prompts = []
         tokens_positives = []
@@ -642,28 +658,30 @@ class LAEDINO(DINO):
             custom_entities = batch_data_samples[0].custom_entities
         else:
             custom_entities = False
-        if len(text_prompts) == 1:
-            # All the text prompts are the same,
-            # so there is no need to calculate them multiple times.
-            _positive_maps_and_prompts = [
-                self.get_tokens_positive_and_prompts(
-                    text_prompts[0], custom_entities, enhanced_text_prompts[0],
-                    tokens_positives[0])
-            ] * len(batch_inputs)
-        else:
-            _positive_maps_and_prompts = [
-                self.get_tokens_positive_and_prompts(text_prompt,
-                                                     custom_entities,
-                                                     enhanced_text_prompt,
-                                                     tokens_positive)
-                for text_prompt, enhanced_text_prompt, tokens_positive in zip(
-                    text_prompts, enhanced_text_prompts, tokens_positives)
-            ]
-        token_positive_maps, text_prompts, _, entities = zip(
-            *_positive_maps_and_prompts)
+        with self.latency_recorder.cpu_block('tokenize'):  # UPDATE: latency-per-block
+            if len(text_prompts) == 1:
+                # All the text prompts are the same,
+                # so there is no need to calculate them multiple times.
+                _positive_maps_and_prompts = [
+                    self.get_tokens_positive_and_prompts(
+                        text_prompts[0], custom_entities, enhanced_text_prompts[0],
+                        tokens_positives[0])
+                ] * len(batch_inputs)
+            else:
+                _positive_maps_and_prompts = [
+                    self.get_tokens_positive_and_prompts(text_prompt,
+                                                         custom_entities,
+                                                         enhanced_text_prompt,
+                                                         tokens_positive)
+                    for text_prompt, enhanced_text_prompt, tokens_positive in zip(
+                        text_prompts, enhanced_text_prompts, tokens_positives)
+                ]
+            token_positive_maps, text_prompts, _, entities = zip(
+                *_positive_maps_and_prompts)
 
         # image feature extraction
-        visual_feats = self.extract_feat(batch_inputs)
+        with self.latency_recorder.cuda_block('extract_feat'):  # UPDATE: latency-per-block
+            visual_feats = self.extract_feat(batch_inputs)
 
         if isinstance(text_prompts[0], list):
             # chunked text prompts, only bs=1 is supported
@@ -676,21 +694,23 @@ class LAEDINO(DINO):
             for b in range(len(text_prompts[0])):
                 text_prompts_once = [text_prompts[0][b]]
                 token_positive_maps_once = token_positive_maps[0][b]
-                text_dict = self.language_model(text_prompts_once)
-                # text feature map layer
-                if self.text_feat_map is not None:
-                    text_dict['embedded'] = self.text_feat_map(
-                        text_dict['embedded'])
+                with self.latency_recorder.cuda_block('language_model'):  # UPDATE: latency-per-block
+                    text_dict = self.language_model(text_prompts_once)
+                    # text feature map layer
+                    if self.text_feat_map is not None:
+                        text_dict['embedded'] = self.text_feat_map(
+                            text_dict['embedded'])
 
                 batch_data_samples[
                     0].token_positive_map = token_positive_maps_once
 
                 head_inputs_dict = self.forward_transformer(
                     copy.deepcopy(visual_feats), text_dict, batch_data_samples)
-                pred_instances = self.bbox_head.predict(
-                    **head_inputs_dict,
-                    rescale=rescale,
-                    batch_data_samples=batch_data_samples)[0]
+                with self.latency_recorder.cuda_block('bbox_head_predict'):  # UPDATE: latency-per-block
+                    pred_instances = self.bbox_head.predict(
+                        **head_inputs_dict,
+                        rescale=rescale,
+                        batch_data_samples=batch_data_samples)[0]
 
                 if len(pred_instances) > 0:
                     pred_instances.labels += count
@@ -700,11 +720,12 @@ class LAEDINO(DINO):
             is_rec_tasks = [False] * len(results_list)
         else:
             # extract text feats
-            text_dict = self.language_model(list(text_prompts))
-            # text feature map layer
-            if self.text_feat_map is not None:
-                text_dict['embedded'] = self.text_feat_map(
-                    text_dict['embedded'])
+            with self.latency_recorder.cuda_block('language_model'):  # UPDATE: latency-per-block
+                text_dict = self.language_model(list(text_prompts))
+                # text feature map layer
+                if self.text_feat_map is not None:
+                    text_dict['embedded'] = self.text_feat_map(
+                        text_dict['embedded'])
 
             is_rec_tasks = []
             for i, data_samples in enumerate(batch_data_samples):
@@ -725,10 +746,11 @@ class LAEDINO(DINO):
             # # np.save('txt_emb.npy', img_emb, allow_pickle=True)
             # ##################################
             
-            results_list = self.bbox_head.predict(
-                **head_inputs_dict,
-                rescale=rescale,
-                batch_data_samples=batch_data_samples)
+            with self.latency_recorder.cuda_block('bbox_head_predict'):  # UPDATE: latency-per-block
+                results_list = self.bbox_head.predict(
+                    **head_inputs_dict,
+                    rescale=rescale,
+                    batch_data_samples=batch_data_samples)
 
         for data_sample, pred_instances, entity, is_rec_task in zip(
                 batch_data_samples, results_list, entities, is_rec_tasks):
