@@ -1,0 +1,1381 @@
+08/08 01:10:39 - mmengine - INFO - 
+------------------------------------------------------------
+System environment:
+    sys.platform: linux
+    Python: 3.8.20 (default, Oct  3 2024, 15:24:27) [GCC 11.2.0]
+    CUDA available: True
+    MUSA available: False
+    numpy_random_seed: 1027093591
+    GPU 0: NVIDIA A100-SXM4-80GB
+    CUDA_HOME: /usr/local/cuda
+    NVCC: Cuda compilation tools, release 12.8, V12.8.93
+    GCC: gcc (SUSE Linux) 7.5.0
+    PyTorch: 1.10.0+cu113
+    PyTorch compiling details: PyTorch built with:
+  - GCC 7.3
+  - C++ Version: 201402
+  - Intel(R) Math Kernel Library Version 2020.0.0 Product Build 20191122 for Intel(R) 64 architecture applications
+  - Intel(R) MKL-DNN v2.2.3 (Git Hash 7336ca9f055cf1bfa13efb658fe15dc9b41f0740)
+  - OpenMP 201511 (a.k.a. OpenMP 4.5)
+  - LAPACK is enabled (usually provided by MKL)
+  - NNPACK is enabled
+  - CPU capability usage: AVX512
+  - CUDA Runtime 11.3
+  - NVCC architecture flags: -gencode;arch=compute_37,code=sm_37;-gencode;arch=compute_50,code=sm_50;-gencode;arch=compute_60,code=sm_60;-gencode;arch=compute_70,code=sm_70;-gencode;arch=compute_75,code=sm_75;-gencode;arch=compute_80,code=sm_80;-gencode;arch=compute_86,code=sm_86
+  - CuDNN 8.2
+  - Magma 2.5.2
+  - Build settings: BLAS_INFO=mkl, BUILD_TYPE=Release, CUDA_VERSION=11.3, CUDNN_VERSION=8.2.0, CXX_COMPILER=/opt/rh/devtoolset-7/root/usr/bin/c++, CXX_FLAGS= -Wno-deprecated -fvisibility-inlines-hidden -DUSE_PTHREADPOOL -fopenmp -DNDEBUG -DUSE_KINETO -DUSE_FBGEMM -DUSE_QNNPACK -DUSE_PYTORCH_QNNPACK -DUSE_XNNPACK -DSYMBOLICATE_MOBILE_DEBUG_HANDLE -DEDGE_PROFILER_USE_KINETO -O2 -fPIC -Wno-narrowing -Wall -Wextra -Werror=return-type -Wno-missing-field-initializers -Wno-type-limits -Wno-array-bounds -Wno-unknown-pragmas -Wno-sign-compare -Wno-unused-parameter -Wno-unused-variable -Wno-unused-function -Wno-unused-result -Wno-unused-local-typedefs -Wno-strict-overflow -Wno-strict-aliasing -Wno-error=deprecated-declarations -Wno-stringop-overflow -Wno-psabi -Wno-error=pedantic -Wno-error=redundant-decls -Wno-error=old-style-cast -fdiagnostics-color=always -faligned-new -Wno-unused-but-set-variable -Wno-maybe-uninitialized -fno-math-errno -fno-trapping-math -Werror=format -Wno-stringop-overflow, LAPACK_INFO=mkl, PERF_WITH_AVX=1, PERF_WITH_AVX2=1, PERF_WITH_AVX512=1, TORCH_VERSION=1.10.0, USE_CUDA=ON, USE_CUDNN=ON, USE_EXCEPTION_PTR=1, USE_GFLAGS=OFF, USE_GLOG=OFF, USE_MKL=ON, USE_MKLDNN=ON, USE_MPI=OFF, USE_NCCL=ON, USE_NNPACK=ON, USE_OPENMP=ON, 
+
+    TorchVision: 0.11.1+cu113
+    OpenCV: 4.10.0
+    MMEngine: 0.10.7
+
+Runtime environment:
+    cudnn_benchmark: False
+    mp_cfg: {'mp_start_method': 'fork', 'opencv_num_threads': 0}
+    dist_cfg: {'backend': 'nccl'}
+    seed: 1027093591
+    Distributed launcher: pytorch
+    Distributed training: True
+    GPU number: 1
+------------------------------------------------------------
+
+08/08 01:10:42 - mmengine - INFO - Config:
+DOTAv2_train_dataset = dict(
+    ann_file='processed_DOTAv2_train.json',
+    backend_args=None,
+    data_prefix=dict(img='images/'),
+    data_root='../data/LAE-FOD/DOTAv2/',
+    filter_cfg=dict(filter_empty_gt=True),
+    metainfo=dict(
+        classes=(
+            'plane',
+            'ship',
+            'storage tank',
+            'baseball diamond',
+            'tennis court',
+            'basketball court',
+            'ground track field',
+            'harbor',
+            'bridge',
+            'large vehicle',
+            'small vehicle',
+            'helicopter',
+            'roundabout',
+            'soccer ball field',
+            'swimming pool',
+            'container crane',
+            'airport',
+            'helipad',
+        )),
+    pipeline=[
+        dict(backend_args=None, type='LoadImageFromFile'),
+        dict(type='LoadAnnotations', with_bbox=True),
+        dict(prob=0.5, type='RandomFlip'),
+        dict(
+            transforms=[
+                [
+                    dict(
+                        keep_ratio=True,
+                        scales=[
+                            (
+                                480,
+                                1333,
+                            ),
+                            (
+                                512,
+                                1333,
+                            ),
+                            (
+                                544,
+                                1333,
+                            ),
+                            (
+                                576,
+                                1333,
+                            ),
+                            (
+                                608,
+                                1333,
+                            ),
+                            (
+                                640,
+                                1333,
+                            ),
+                            (
+                                672,
+                                1333,
+                            ),
+                            (
+                                704,
+                                1333,
+                            ),
+                            (
+                                736,
+                                1333,
+                            ),
+                            (
+                                768,
+                                1333,
+                            ),
+                            (
+                                800,
+                                1333,
+                            ),
+                        ],
+                        type='RandomChoiceResize'),
+                ],
+                [
+                    dict(
+                        keep_ratio=True,
+                        scales=[
+                            (
+                                400,
+                                4200,
+                            ),
+                            (
+                                500,
+                                4200,
+                            ),
+                            (
+                                600,
+                                4200,
+                            ),
+                        ],
+                        type='RandomChoiceResize'),
+                    dict(
+                        allow_negative_crop=True,
+                        crop_size=(
+                            384,
+                            600,
+                        ),
+                        crop_type='absolute_range',
+                        type='RandomCrop'),
+                    dict(
+                        keep_ratio=True,
+                        scales=[
+                            (
+                                480,
+                                1333,
+                            ),
+                            (
+                                512,
+                                1333,
+                            ),
+                            (
+                                544,
+                                1333,
+                            ),
+                            (
+                                576,
+                                1333,
+                            ),
+                            (
+                                608,
+                                1333,
+                            ),
+                            (
+                                640,
+                                1333,
+                            ),
+                            (
+                                672,
+                                1333,
+                            ),
+                            (
+                                704,
+                                1333,
+                            ),
+                            (
+                                736,
+                                1333,
+                            ),
+                            (
+                                768,
+                                1333,
+                            ),
+                            (
+                                800,
+                                1333,
+                            ),
+                        ],
+                        type='RandomChoiceResize'),
+                ],
+            ],
+            type='RandomChoice'),
+        dict(
+            meta_keys=(
+                'img_id',
+                'img_path',
+                'ori_shape',
+                'img_shape',
+                'scale_factor',
+                'flip',
+                'flip_direction',
+                'text',
+                'custom_entities',
+            ),
+            type='PackDetInputs'),
+    ],
+    return_classes=True,
+    type='CocoDataset')
+DOTAv2_val_dataset = dict(
+    ann_file='DOTAv2_val.json',
+    backend_args=None,
+    data_prefix=dict(img='images/'),
+    data_root='../data/LAE-FOD/DOTAv2/',
+    metainfo=dict(
+        classes=(
+            'plane',
+            'ship',
+            'storage tank',
+            'baseball diamond',
+            'tennis court',
+            'basketball court',
+            'ground track field',
+            'harbor',
+            'bridge',
+            'large vehicle',
+            'small vehicle',
+            'helicopter',
+            'roundabout',
+            'soccer ball field',
+            'swimming pool',
+            'container crane',
+            'airport',
+            'helipad',
+        )),
+    pipeline=[
+        dict(backend_args=None, type='LoadImageFromFile'),
+        dict(keep_ratio=True, scale=(
+            800,
+            1333,
+        ), type='FixScaleResize'),
+        dict(type='LoadAnnotations', with_bbox=True),
+        dict(
+            meta_keys=(
+                'img_id',
+                'img_path',
+                'ori_shape',
+                'img_shape',
+                'scale_factor',
+                'text',
+                'custom_entities',
+            ),
+            type='PackDetInputs'),
+    ],
+    return_classes=True,
+    test_mode=True,
+    type='CocoDataset')
+DOTAv2_val_evaluator = dict(
+    ann_file='../data/LAE-FOD/DOTAv2/DOTAv2_val.json',
+    backend_args=None,
+    format_only=False,
+    metric='bbox',
+    type='CocoMetric')
+all_metrics = [
+    dict(
+        ann_file='../data/LAE-FOD/DOTAv2/DOTAv2_val.json',
+        backend_args=None,
+        format_only=False,
+        metric='bbox',
+        type='CocoMetric'),
+]
+all_train_dataset = [
+    dict(
+        ann_file='processed_DOTAv2_train.json',
+        backend_args=None,
+        data_prefix=dict(img='images/'),
+        data_root='../data/LAE-FOD/DOTAv2/',
+        filter_cfg=dict(filter_empty_gt=True),
+        metainfo=dict(
+            classes=(
+                'plane',
+                'ship',
+                'storage tank',
+                'baseball diamond',
+                'tennis court',
+                'basketball court',
+                'ground track field',
+                'harbor',
+                'bridge',
+                'large vehicle',
+                'small vehicle',
+                'helicopter',
+                'roundabout',
+                'soccer ball field',
+                'swimming pool',
+                'container crane',
+                'airport',
+                'helipad',
+            )),
+        pipeline=[
+            dict(backend_args=None, type='LoadImageFromFile'),
+            dict(type='LoadAnnotations', with_bbox=True),
+            dict(prob=0.5, type='RandomFlip'),
+            dict(
+                transforms=[
+                    [
+                        dict(
+                            keep_ratio=True,
+                            scales=[
+                                (
+                                    480,
+                                    1333,
+                                ),
+                                (
+                                    512,
+                                    1333,
+                                ),
+                                (
+                                    544,
+                                    1333,
+                                ),
+                                (
+                                    576,
+                                    1333,
+                                ),
+                                (
+                                    608,
+                                    1333,
+                                ),
+                                (
+                                    640,
+                                    1333,
+                                ),
+                                (
+                                    672,
+                                    1333,
+                                ),
+                                (
+                                    704,
+                                    1333,
+                                ),
+                                (
+                                    736,
+                                    1333,
+                                ),
+                                (
+                                    768,
+                                    1333,
+                                ),
+                                (
+                                    800,
+                                    1333,
+                                ),
+                            ],
+                            type='RandomChoiceResize'),
+                    ],
+                    [
+                        dict(
+                            keep_ratio=True,
+                            scales=[
+                                (
+                                    400,
+                                    4200,
+                                ),
+                                (
+                                    500,
+                                    4200,
+                                ),
+                                (
+                                    600,
+                                    4200,
+                                ),
+                            ],
+                            type='RandomChoiceResize'),
+                        dict(
+                            allow_negative_crop=True,
+                            crop_size=(
+                                384,
+                                600,
+                            ),
+                            crop_type='absolute_range',
+                            type='RandomCrop'),
+                        dict(
+                            keep_ratio=True,
+                            scales=[
+                                (
+                                    480,
+                                    1333,
+                                ),
+                                (
+                                    512,
+                                    1333,
+                                ),
+                                (
+                                    544,
+                                    1333,
+                                ),
+                                (
+                                    576,
+                                    1333,
+                                ),
+                                (
+                                    608,
+                                    1333,
+                                ),
+                                (
+                                    640,
+                                    1333,
+                                ),
+                                (
+                                    672,
+                                    1333,
+                                ),
+                                (
+                                    704,
+                                    1333,
+                                ),
+                                (
+                                    736,
+                                    1333,
+                                ),
+                                (
+                                    768,
+                                    1333,
+                                ),
+                                (
+                                    800,
+                                    1333,
+                                ),
+                            ],
+                            type='RandomChoiceResize'),
+                    ],
+                ],
+                type='RandomChoice'),
+            dict(
+                meta_keys=(
+                    'img_id',
+                    'img_path',
+                    'ori_shape',
+                    'img_shape',
+                    'scale_factor',
+                    'flip',
+                    'flip_direction',
+                    'text',
+                    'custom_entities',
+                ),
+                type='PackDetInputs'),
+        ],
+        return_classes=True,
+        type='CocoDataset'),
+]
+all_val_dataset = [
+    dict(
+        ann_file='DOTAv2_val.json',
+        backend_args=None,
+        data_prefix=dict(img='images/'),
+        data_root='../data/LAE-FOD/DOTAv2/',
+        metainfo=dict(
+            classes=(
+                'plane',
+                'ship',
+                'storage tank',
+                'baseball diamond',
+                'tennis court',
+                'basketball court',
+                'ground track field',
+                'harbor',
+                'bridge',
+                'large vehicle',
+                'small vehicle',
+                'helicopter',
+                'roundabout',
+                'soccer ball field',
+                'swimming pool',
+                'container crane',
+                'airport',
+                'helipad',
+            )),
+        pipeline=[
+            dict(backend_args=None, type='LoadImageFromFile'),
+            dict(keep_ratio=True, scale=(
+                800,
+                1333,
+            ), type='FixScaleResize'),
+            dict(type='LoadAnnotations', with_bbox=True),
+            dict(
+                meta_keys=(
+                    'img_id',
+                    'img_path',
+                    'ori_shape',
+                    'img_shape',
+                    'scale_factor',
+                    'text',
+                    'custom_entities',
+                ),
+                type='PackDetInputs'),
+        ],
+        return_classes=True,
+        test_mode=True,
+        type='CocoDataset'),
+]
+auto_scale_lr = dict(base_batch_size=16, enable=False)
+backend_args = None
+custom_hooks = [
+    dict(type='LatencyLoggerHook'),
+]
+data_root = '../data/LAE-FOD/DOTAv2/'
+dataset_prefixes = [
+    'DOTAv2',
+]
+dataset_type = 'CocoDataset'
+default_hooks = dict(
+    checkpoint=dict(interval=1, type='CheckpointHook'),
+    logger=dict(interval=50, type='LoggerHook'),
+    param_scheduler=dict(type='ParamSchedulerHook'),
+    sampler_seed=dict(type='DistSamplerSeedHook'),
+    timer=dict(type='IterTimerHook'),
+    visualization=dict(type='DetVisualizationHook'))
+default_scope = 'mmdet'
+env_cfg = dict(
+    cudnn_benchmark=False,
+    dist_cfg=dict(backend='nccl'),
+    mp_cfg=dict(mp_start_method='fork', opencv_num_threads=0))
+lang_model_name = '../weights/bert-base-uncased'
+launcher = 'pytorch'
+load_from = '/dss/dsstbyfs02/scratch/07/di54rur/LAE-1M/work_dirs/lae_dino_swin-t_finetune_DOTA/epoch_32.pth'
+log_level = 'INFO'
+log_processor = dict(by_epoch=True, type='LogProcessor', window_size=50)
+max_epochs = 32
+metainfo = dict(
+    classes=(
+        'plane',
+        'ship',
+        'storage tank',
+        'baseball diamond',
+        'tennis court',
+        'basketball court',
+        'ground track field',
+        'harbor',
+        'bridge',
+        'large vehicle',
+        'small vehicle',
+        'helicopter',
+        'roundabout',
+        'soccer ball field',
+        'swimming pool',
+        'container crane',
+        'airport',
+        'helipad',
+    ))
+model = dict(
+    as_two_stage=True,
+    backbone=dict(
+        attn_drop_rate=0.0,
+        convert_weights=False,
+        depths=[
+            2,
+            2,
+            6,
+            2,
+        ],
+        drop_path_rate=0.2,
+        drop_rate=0.0,
+        embed_dims=96,
+        frozen_stages=-1,
+        mlp_ratio=4,
+        num_heads=[
+            3,
+            6,
+            12,
+            24,
+        ],
+        out_indices=(
+            1,
+            2,
+            3,
+        ),
+        patch_norm=True,
+        qk_scale=None,
+        qkv_bias=True,
+        type='SwinTransformer',
+        window_size=7,
+        with_cp=True),
+    bbox_head=dict(
+        contrastive_cfg=dict(bias=False, log_scale=0.0, max_text_len=256),
+        loss_bbox=dict(loss_weight=5.0, type='L1Loss'),
+        loss_cls=dict(
+            alpha=0.25,
+            gamma=2.0,
+            loss_weight=1.0,
+            type='FocalLoss',
+            use_sigmoid=True),
+        loss_iou=dict(loss_weight=2.0, type='GIoULoss'),
+        num_classes=20,
+        sync_cls_avg_factor=True,
+        type='LAEDINOHead'),
+    data_preprocessor=dict(
+        bgr_to_rgb=True,
+        mean=[
+            123.675,
+            116.28,
+            103.53,
+        ],
+        pad_mask=False,
+        std=[
+            58.395,
+            57.12,
+            57.375,
+        ],
+        type='DetDataPreprocessor'),
+    decoder=dict(
+        layer_cfg=dict(
+            cross_attn_cfg=dict(dropout=0.0, embed_dims=256, num_heads=8),
+            cross_attn_text_cfg=dict(dropout=0.0, embed_dims=256, num_heads=8),
+            ffn_cfg=dict(
+                embed_dims=256, feedforward_channels=2048, ffn_drop=0.0),
+            self_attn_cfg=dict(dropout=0.0, embed_dims=256, num_heads=8)),
+        num_layers=6,
+        post_norm_cfg=None,
+        return_intermediate=True),
+    dn_cfg=dict(
+        box_noise_scale=1.0,
+        group_cfg=dict(dynamic=True, num_dn_queries=100, num_groups=None),
+        label_noise_scale=0.5),
+    encoder=dict(
+        fusion_layer_cfg=dict(
+            embed_dim=1024,
+            init_values=0.0001,
+            l_dim=256,
+            num_heads=4,
+            v_dim=256),
+        layer_cfg=dict(
+            ffn_cfg=dict(
+                embed_dims=256, feedforward_channels=2048, ffn_drop=0.0),
+            self_attn_cfg=dict(dropout=0.0, embed_dims=256, num_levels=4)),
+        num_cp=6,
+        num_layers=6,
+        text_layer_cfg=dict(
+            ffn_cfg=dict(
+                embed_dims=256, feedforward_channels=1024, ffn_drop=0.0),
+            self_attn_cfg=dict(dropout=0.0, embed_dims=256, num_heads=4))),
+    language_model=dict(
+        add_pooling_layer=False,
+        name='../weights/bert-base-uncased',
+        pad_to_max=False,
+        special_tokens_list=[
+            '[CLS]',
+            '[SEP]',
+            '.',
+            '?',
+        ],
+        type='BertModel',
+        use_sub_sentence_represent=True),
+    latency_warmup_iters=10,
+    neck=dict(
+        act_cfg=None,
+        bias=True,
+        in_channels=[
+            192,
+            384,
+            768,
+        ],
+        kernel_size=1,
+        norm_cfg=dict(num_groups=32, type='GN'),
+        num_outs=4,
+        out_channels=256,
+        type='ChannelMapper'),
+    num_queries=900,
+    per_block_latency_measure=True,
+    positional_encoding=dict(
+        normalize=True, num_feats=128, offset=0.0, temperature=20),
+    test_cfg=dict(max_per_img=300),
+    train_cfg=dict(
+        assigner=dict(
+            match_costs=[
+                dict(type='BinaryFocalLossCost', weight=2.0),
+                dict(box_format='xywh', type='BBoxL1Cost', weight=5.0),
+                dict(iou_mode='giou', type='IoUCost', weight=2.0),
+            ],
+            type='HungarianAssigner')),
+    type='LAEDINO',
+    with_box_refine=True)
+optim_wrapper = dict(
+    clip_grad=dict(max_norm=0.1, norm_type=2),
+    optimizer=dict(lr=0.0001, type='AdamW', weight_decay=0.0001),
+    paramwise_cfg=dict(
+        custom_keys=dict(
+            absolute_pos_embed=dict(decay_mult=0.0),
+            backbone=dict(lr_mult=0.1))),
+    type='OptimWrapper')
+param_scheduler = [
+    dict(
+        begin=0,
+        by_epoch=True,
+        end=32,
+        gamma=0.1,
+        milestones=[
+            11,
+        ],
+        type='MultiStepLR'),
+]
+pretrained = 'https://github.com/SwinTransformer/storage/releases/download/v1.0.0/swin_tiny_patch4_window7_224.pth'
+resume = False
+test_cfg = dict(type='TestLoop')
+test_dataloader = dict(
+    batch_size=1,
+    dataset=dict(
+        datasets=[
+            dict(
+                ann_file='DOTAv2_val.json',
+                backend_args=None,
+                data_prefix=dict(img='images/'),
+                data_root='../data/LAE-FOD/DOTAv2/',
+                metainfo=dict(
+                    classes=(
+                        'plane',
+                        'ship',
+                        'storage tank',
+                        'baseball diamond',
+                        'tennis court',
+                        'basketball court',
+                        'ground track field',
+                        'harbor',
+                        'bridge',
+                        'large vehicle',
+                        'small vehicle',
+                        'helicopter',
+                        'roundabout',
+                        'soccer ball field',
+                        'swimming pool',
+                        'container crane',
+                        'airport',
+                        'helipad',
+                    )),
+                pipeline=[
+                    dict(backend_args=None, type='LoadImageFromFile'),
+                    dict(
+                        keep_ratio=True,
+                        scale=(
+                            800,
+                            1333,
+                        ),
+                        type='FixScaleResize'),
+                    dict(type='LoadAnnotations', with_bbox=True),
+                    dict(
+                        meta_keys=(
+                            'img_id',
+                            'img_path',
+                            'ori_shape',
+                            'img_shape',
+                            'scale_factor',
+                            'text',
+                            'custom_entities',
+                        ),
+                        type='PackDetInputs'),
+                ],
+                return_classes=True,
+                test_mode=True,
+                type='CocoDataset'),
+        ],
+        type='ConcatDataset'),
+    drop_last=False,
+    num_workers=2,
+    persistent_workers=True,
+    sampler=dict(shuffle=False, type='DefaultSampler'))
+test_evaluator = dict(
+    dataset_prefixes=[
+        'DOTAv2',
+    ],
+    metrics=[
+        dict(
+            ann_file='../data/LAE-FOD/DOTAv2/DOTAv2_val.json',
+            backend_args=None,
+            format_only=False,
+            metric='bbox',
+            type='CocoMetric'),
+    ],
+    type='MultiDatasetsEvaluator')
+test_pipeline = [
+    dict(backend_args=None, type='LoadImageFromFile'),
+    dict(keep_ratio=True, scale=(
+        800,
+        1333,
+    ), type='FixScaleResize'),
+    dict(type='LoadAnnotations', with_bbox=True),
+    dict(
+        meta_keys=(
+            'img_id',
+            'img_path',
+            'ori_shape',
+            'img_shape',
+            'scale_factor',
+            'text',
+            'custom_entities',
+        ),
+        type='PackDetInputs'),
+]
+train_cfg = dict(max_epochs=32, type='EpochBasedTrainLoop', val_interval=1)
+train_dataloader = dict(
+    batch_sampler=dict(type='AspectRatioBatchSampler'),
+    batch_size=2,
+    dataset=dict(
+        datasets=[
+            dict(
+                ann_file='processed_DOTAv2_train.json',
+                backend_args=None,
+                data_prefix=dict(img='images/'),
+                data_root='../data/LAE-FOD/DOTAv2/',
+                filter_cfg=dict(filter_empty_gt=True),
+                metainfo=dict(
+                    classes=(
+                        'plane',
+                        'ship',
+                        'storage tank',
+                        'baseball diamond',
+                        'tennis court',
+                        'basketball court',
+                        'ground track field',
+                        'harbor',
+                        'bridge',
+                        'large vehicle',
+                        'small vehicle',
+                        'helicopter',
+                        'roundabout',
+                        'soccer ball field',
+                        'swimming pool',
+                        'container crane',
+                        'airport',
+                        'helipad',
+                    )),
+                pipeline=[
+                    dict(backend_args=None, type='LoadImageFromFile'),
+                    dict(type='LoadAnnotations', with_bbox=True),
+                    dict(prob=0.5, type='RandomFlip'),
+                    dict(
+                        transforms=[
+                            [
+                                dict(
+                                    keep_ratio=True,
+                                    scales=[
+                                        (
+                                            480,
+                                            1333,
+                                        ),
+                                        (
+                                            512,
+                                            1333,
+                                        ),
+                                        (
+                                            544,
+                                            1333,
+                                        ),
+                                        (
+                                            576,
+                                            1333,
+                                        ),
+                                        (
+                                            608,
+                                            1333,
+                                        ),
+                                        (
+                                            640,
+                                            1333,
+                                        ),
+                                        (
+                                            672,
+                                            1333,
+                                        ),
+                                        (
+                                            704,
+                                            1333,
+                                        ),
+                                        (
+                                            736,
+                                            1333,
+                                        ),
+                                        (
+                                            768,
+                                            1333,
+                                        ),
+                                        (
+                                            800,
+                                            1333,
+                                        ),
+                                    ],
+                                    type='RandomChoiceResize'),
+                            ],
+                            [
+                                dict(
+                                    keep_ratio=True,
+                                    scales=[
+                                        (
+                                            400,
+                                            4200,
+                                        ),
+                                        (
+                                            500,
+                                            4200,
+                                        ),
+                                        (
+                                            600,
+                                            4200,
+                                        ),
+                                    ],
+                                    type='RandomChoiceResize'),
+                                dict(
+                                    allow_negative_crop=True,
+                                    crop_size=(
+                                        384,
+                                        600,
+                                    ),
+                                    crop_type='absolute_range',
+                                    type='RandomCrop'),
+                                dict(
+                                    keep_ratio=True,
+                                    scales=[
+                                        (
+                                            480,
+                                            1333,
+                                        ),
+                                        (
+                                            512,
+                                            1333,
+                                        ),
+                                        (
+                                            544,
+                                            1333,
+                                        ),
+                                        (
+                                            576,
+                                            1333,
+                                        ),
+                                        (
+                                            608,
+                                            1333,
+                                        ),
+                                        (
+                                            640,
+                                            1333,
+                                        ),
+                                        (
+                                            672,
+                                            1333,
+                                        ),
+                                        (
+                                            704,
+                                            1333,
+                                        ),
+                                        (
+                                            736,
+                                            1333,
+                                        ),
+                                        (
+                                            768,
+                                            1333,
+                                        ),
+                                        (
+                                            800,
+                                            1333,
+                                        ),
+                                    ],
+                                    type='RandomChoiceResize'),
+                            ],
+                        ],
+                        type='RandomChoice'),
+                    dict(
+                        meta_keys=(
+                            'img_id',
+                            'img_path',
+                            'ori_shape',
+                            'img_shape',
+                            'scale_factor',
+                            'flip',
+                            'flip_direction',
+                            'text',
+                            'custom_entities',
+                        ),
+                        type='PackDetInputs'),
+                ],
+                return_classes=True,
+                type='CocoDataset'),
+        ],
+        type='ConcatDataset'),
+    num_workers=4,
+    persistent_workers=True,
+    sampler=dict(shuffle=True, type='DefaultSampler'))
+train_pipeline = [
+    dict(backend_args=None, type='LoadImageFromFile'),
+    dict(type='LoadAnnotations', with_bbox=True),
+    dict(prob=0.5, type='RandomFlip'),
+    dict(
+        transforms=[
+            [
+                dict(
+                    keep_ratio=True,
+                    scales=[
+                        (
+                            480,
+                            1333,
+                        ),
+                        (
+                            512,
+                            1333,
+                        ),
+                        (
+                            544,
+                            1333,
+                        ),
+                        (
+                            576,
+                            1333,
+                        ),
+                        (
+                            608,
+                            1333,
+                        ),
+                        (
+                            640,
+                            1333,
+                        ),
+                        (
+                            672,
+                            1333,
+                        ),
+                        (
+                            704,
+                            1333,
+                        ),
+                        (
+                            736,
+                            1333,
+                        ),
+                        (
+                            768,
+                            1333,
+                        ),
+                        (
+                            800,
+                            1333,
+                        ),
+                    ],
+                    type='RandomChoiceResize'),
+            ],
+            [
+                dict(
+                    keep_ratio=True,
+                    scales=[
+                        (
+                            400,
+                            4200,
+                        ),
+                        (
+                            500,
+                            4200,
+                        ),
+                        (
+                            600,
+                            4200,
+                        ),
+                    ],
+                    type='RandomChoiceResize'),
+                dict(
+                    allow_negative_crop=True,
+                    crop_size=(
+                        384,
+                        600,
+                    ),
+                    crop_type='absolute_range',
+                    type='RandomCrop'),
+                dict(
+                    keep_ratio=True,
+                    scales=[
+                        (
+                            480,
+                            1333,
+                        ),
+                        (
+                            512,
+                            1333,
+                        ),
+                        (
+                            544,
+                            1333,
+                        ),
+                        (
+                            576,
+                            1333,
+                        ),
+                        (
+                            608,
+                            1333,
+                        ),
+                        (
+                            640,
+                            1333,
+                        ),
+                        (
+                            672,
+                            1333,
+                        ),
+                        (
+                            704,
+                            1333,
+                        ),
+                        (
+                            736,
+                            1333,
+                        ),
+                        (
+                            768,
+                            1333,
+                        ),
+                        (
+                            800,
+                            1333,
+                        ),
+                    ],
+                    type='RandomChoiceResize'),
+            ],
+        ],
+        type='RandomChoice'),
+    dict(
+        meta_keys=(
+            'img_id',
+            'img_path',
+            'ori_shape',
+            'img_shape',
+            'scale_factor',
+            'flip',
+            'flip_direction',
+            'text',
+            'custom_entities',
+        ),
+        type='PackDetInputs'),
+]
+val_cfg = dict(type='ValLoop')
+val_dataloader = dict(
+    batch_size=1,
+    dataset=dict(
+        datasets=[
+            dict(
+                ann_file='DOTAv2_val.json',
+                backend_args=None,
+                data_prefix=dict(img='images/'),
+                data_root='../data/LAE-FOD/DOTAv2/',
+                metainfo=dict(
+                    classes=(
+                        'plane',
+                        'ship',
+                        'storage tank',
+                        'baseball diamond',
+                        'tennis court',
+                        'basketball court',
+                        'ground track field',
+                        'harbor',
+                        'bridge',
+                        'large vehicle',
+                        'small vehicle',
+                        'helicopter',
+                        'roundabout',
+                        'soccer ball field',
+                        'swimming pool',
+                        'container crane',
+                        'airport',
+                        'helipad',
+                    )),
+                pipeline=[
+                    dict(backend_args=None, type='LoadImageFromFile'),
+                    dict(
+                        keep_ratio=True,
+                        scale=(
+                            800,
+                            1333,
+                        ),
+                        type='FixScaleResize'),
+                    dict(type='LoadAnnotations', with_bbox=True),
+                    dict(
+                        meta_keys=(
+                            'img_id',
+                            'img_path',
+                            'ori_shape',
+                            'img_shape',
+                            'scale_factor',
+                            'text',
+                            'custom_entities',
+                        ),
+                        type='PackDetInputs'),
+                ],
+                return_classes=True,
+                test_mode=True,
+                type='CocoDataset'),
+        ],
+        type='ConcatDataset'),
+    drop_last=False,
+    num_workers=2,
+    persistent_workers=True,
+    sampler=dict(shuffle=False, type='DefaultSampler'))
+val_evaluator = dict(
+    dataset_prefixes=[
+        'DOTAv2',
+    ],
+    metrics=[
+        dict(
+            ann_file='../data/LAE-FOD/DOTAv2/DOTAv2_val.json',
+            backend_args=None,
+            format_only=False,
+            metric='bbox',
+            type='CocoMetric'),
+    ],
+    type='MultiDatasetsEvaluator')
+vis_backends = [
+    dict(type='LocalVisBackend'),
+]
+visualizer = dict(
+    name='visualizer',
+    type='DetLocalVisualizer',
+    vis_backends=[
+        dict(type='LocalVisBackend'),
+    ])
+work_dir = '/dss/dsstbyfs02/scratch/07/di54rur/LAE-1M/work_dirs/lae_dino_swin-t_finetune_DOTA_cs-eval'
+
+08/08 01:11:25 - mmengine - INFO - Hooks will be executed in the following order:
+before_run:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(BELOW_NORMAL) LoggerHook                         
+ -------------------- 
+before_train:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+(VERY_LOW    ) CheckpointHook                     
+ -------------------- 
+before_train_epoch:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+(NORMAL      ) DistSamplerSeedHook                
+ -------------------- 
+before_train_iter:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+ -------------------- 
+after_train_iter:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+(BELOW_NORMAL) LoggerHook                         
+(LOW         ) ParamSchedulerHook                 
+(VERY_LOW    ) CheckpointHook                     
+ -------------------- 
+after_train_epoch:
+(NORMAL      ) IterTimerHook                      
+(LOW         ) ParamSchedulerHook                 
+(VERY_LOW    ) CheckpointHook                     
+ -------------------- 
+before_val:
+(VERY_HIGH   ) RuntimeInfoHook                    
+ -------------------- 
+before_val_epoch:
+(NORMAL      ) IterTimerHook                      
+ -------------------- 
+before_val_iter:
+(NORMAL      ) IterTimerHook                      
+ -------------------- 
+after_val_iter:
+(NORMAL      ) IterTimerHook                      
+(NORMAL      ) DetVisualizationHook               
+(BELOW_NORMAL) LoggerHook                         
+ -------------------- 
+after_val_epoch:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+(BELOW_NORMAL) LoggerHook                         
+(LOW         ) ParamSchedulerHook                 
+(VERY_LOW    ) CheckpointHook                     
+ -------------------- 
+after_val:
+(VERY_HIGH   ) RuntimeInfoHook                    
+ -------------------- 
+after_train:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(VERY_LOW    ) CheckpointHook                     
+ -------------------- 
+before_test:
+(VERY_HIGH   ) RuntimeInfoHook                    
+ -------------------- 
+before_test_epoch:
+(NORMAL      ) IterTimerHook                      
+(NORMAL      ) LatencyLoggerHook                  
+ -------------------- 
+before_test_iter:
+(NORMAL      ) IterTimerHook                      
+ -------------------- 
+after_test_iter:
+(NORMAL      ) IterTimerHook                      
+(NORMAL      ) DetVisualizationHook               
+(BELOW_NORMAL) LoggerHook                         
+ -------------------- 
+after_test_epoch:
+(VERY_HIGH   ) RuntimeInfoHook                    
+(NORMAL      ) IterTimerHook                      
+(NORMAL      ) LatencyLoggerHook                  
+(BELOW_NORMAL) LoggerHook                         
+ -------------------- 
+after_test:
+(VERY_HIGH   ) RuntimeInfoHook                    
+ -------------------- 
+after_run:
+(BELOW_NORMAL) LoggerHook                         
+ -------------------- 
+loading annotations into memory...
+Done (t=0.14s)
+creating index...
+index created!
+loading annotations into memory...
+Done (t=0.07s)
+creating index...
+index created!
+Loads checkpoint by local backend from path: /dss/dsstbyfs02/scratch/07/di54rur/LAE-1M/work_dirs/lae_dino_swin-t_finetune_DOTA/epoch_32.pth
+08/08 01:11:41 - mmengine - INFO - Load checkpoint from /dss/dsstbyfs02/scratch/07/di54rur/LAE-1M/work_dirs/lae_dino_swin-t_finetune_DOTA/epoch_32.pth
+08/08 01:11:47 - mmengine - INFO - Epoch(test) [ 50/874]    eta: 0:01:44  time: 0.1271  data_time: 0.0085  memory: 1707  
+08/08 01:11:52 - mmengine - INFO - Epoch(test) [100/874]    eta: 0:01:28  time: 0.1010  data_time: 0.0019  memory: 1706  
+08/08 01:11:57 - mmengine - INFO - Epoch(test) [150/874]    eta: 0:01:19  time: 0.1017  data_time: 0.0020  memory: 1706  
+08/08 01:12:03 - mmengine - INFO - Epoch(test) [200/874]    eta: 0:01:12  time: 0.1015  data_time: 0.0020  memory: 1706  
+08/08 01:12:08 - mmengine - INFO - Epoch(test) [250/874]    eta: 0:01:06  time: 0.1015  data_time: 0.0020  memory: 1706  
+08/08 01:12:13 - mmengine - INFO - Epoch(test) [300/874]    eta: 0:01:00  time: 0.1017  data_time: 0.0020  memory: 1706  
+08/08 01:12:18 - mmengine - INFO - Epoch(test) [350/874]    eta: 0:00:55  time: 0.1018  data_time: 0.0021  memory: 1706  
+08/08 01:12:23 - mmengine - INFO - Epoch(test) [400/874]    eta: 0:00:49  time: 0.1010  data_time: 0.0019  memory: 1706  
+08/08 01:12:28 - mmengine - INFO - Epoch(test) [450/874]    eta: 0:00:44  time: 0.1010  data_time: 0.0018  memory: 1706  
+08/08 01:12:33 - mmengine - INFO - Epoch(test) [500/874]    eta: 0:00:38  time: 0.1010  data_time: 0.0019  memory: 1706  
+08/08 01:12:38 - mmengine - INFO - Epoch(test) [550/874]    eta: 0:00:33  time: 0.1016  data_time: 0.0020  memory: 1706  
+08/08 01:12:43 - mmengine - INFO - Epoch(test) [600/874]    eta: 0:00:28  time: 0.1013  data_time: 0.0019  memory: 1706  
+08/08 01:12:48 - mmengine - INFO - Epoch(test) [650/874]    eta: 0:00:23  time: 0.1015  data_time: 0.0020  memory: 1706  
+08/08 01:12:53 - mmengine - INFO - Epoch(test) [700/874]    eta: 0:00:17  time: 0.1040  data_time: 0.0019  memory: 1706  
+08/08 01:12:58 - mmengine - INFO - Epoch(test) [750/874]    eta: 0:00:12  time: 0.1014  data_time: 0.0019  memory: 1706  
+08/08 01:13:04 - mmengine - INFO - Epoch(test) [800/874]    eta: 0:00:07  time: 0.1037  data_time: 0.0019  memory: 1706  
+08/08 01:13:09 - mmengine - INFO - Epoch(test) [850/874]    eta: 0:00:02  time: 0.1016  data_time: 0.0018  memory: 1706  
+08/08 01:13:15 - mmengine - INFO - Evaluating bbox...
+Loading and preparing results...
+DONE (t=0.77s)
+creating index...
+index created!
+Running per image evaluation...
+Evaluate annotation type *bbox*
+DONE (t=76.27s).
+Accumulating evaluation results...
+DONE (t=4.94s).
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area=   all | maxDets=100 ] = 0.591
+ Average Precision  (AP) @[ IoU=0.50      | area=   all | maxDets=1000 ] = 0.860
+ Average Precision  (AP) @[ IoU=0.75      | area=   all | maxDets=1000 ] = 0.675
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area= small | maxDets=1000 ] = 0.361
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area=medium | maxDets=1000 ] = 0.668
+ Average Precision  (AP) @[ IoU=0.50:0.95 | area= large | maxDets=1000 ] = 0.714
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets=100 ] = 0.679
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets=300 ] = 0.697
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area=   all | maxDets=1000 ] = 0.697
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area= small | maxDets=1000 ] = 0.501
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area=medium | maxDets=1000 ] = 0.742
+ Average Recall     (AR) @[ IoU=0.50:0.95 | area= large | maxDets=1000 ] = 0.798
+08/08 01:14:39 - mmengine - INFO - bbox_mAP_copypaste: 0.591 0.860 0.675 0.361 0.668 0.714
+================DOTAv2/coco================
+08/08 01:14:39 - mmengine - INFO - Per-block latency (warmup=10 iters excluded, gathered across all ranks):
+block                      n    mean(ms)     std(ms)
+bbox_head_predict        864       4.360       0.077
+decoder                  864      19.767       0.403
+extract_feat             864      13.400       0.472
+fusion_encoder           864      21.529       0.445
+language_model           864      14.944       0.455
+pre_transformer          864       2.307       0.135
+tokenize                 864       0.858       0.165
+visgt                    864      10.475       0.159
+08/08 01:14:39 - mmengine - INFO - Epoch(test) [874/874]    DOTAv2/coco/bbox_mAP: 0.5910  DOTAv2/coco/bbox_mAP_50: 0.8600  DOTAv2/coco/bbox_mAP_75: 0.6750  DOTAv2/coco/bbox_mAP_s: 0.3610  DOTAv2/coco/bbox_mAP_m: 0.6680  DOTAv2/coco/bbox_mAP_l: 0.7140  data_time: 0.0023  time: 0.1032
